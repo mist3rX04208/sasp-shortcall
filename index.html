@@ -664,8 +664,8 @@
                     Shortcall
                 </option>
 
-                <option value="Treffpunkt">
-                    Treffpunkt
+                <option value="Kontrollposten">
+                    Kontrollposten
                 </option>
 
             </select>
@@ -898,8 +898,8 @@
                         Shortcall
                     </option>
 
-                    <option value="Treffpunkt">
-                        Treffpunkt
+                    <option value="Kontrollposten">
+                        Kontrollposten
                     </option>
 
                 </select>
@@ -1697,14 +1697,14 @@
 
 
         const markerClass =
-            isTreffpunkt
+            isKontrollposten
                 ? "shortcall-marker treffpunkt-marker"
                 : "shortcall-marker";
 
 
         const markerEmoji =
             isTreffpunkt
-                ? "📌"
+                ? "🚧"
                 : "📍";
 
 
@@ -2103,7 +2103,7 @@
 
         if (
             category !== "Shortcall" &&
-            category !== "Treffpunkt"
+            category !== "Kontrollposten"
         ) {
 
             showPointError(
