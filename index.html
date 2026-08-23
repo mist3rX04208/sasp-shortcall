@@ -1,1 +1,2394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>SASP Shortcall Map</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1118;
+            color: #ffffff;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #101820;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .topbar {
+            position: absolute;
+            z-index: 1000;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+
+            min-height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 12px 18px;
+
+            background: rgba(8, 14, 21, 0.94);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #172433;
+            border: 1px solid rgba(255,255,255,0.15);
+
+            font-size: 22px;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand-subtitle {
+            margin-top: 3px;
+            font-size: 11px;
+            color: #aeb9c6;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        button {
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn {
+            min-height: 40px;
+            padding: 0 14px;
+
+            border-radius: 9px;
+
+            color: #ffffff;
+            background: #1c2938;
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            transition: 0.15s ease;
+        }
+
+        .btn:hover {
+            background: #26374a;
+        }
+
+        .btn-primary {
+            background: #1d5fa7;
+        }
+
+        .btn-primary:hover {
+            background: #2470c2;
+        }
+
+        .btn-danger {
+            background: #8c2630;
+        }
+
+        .btn-danger:hover {
+            background: #a62d39;
+        }
+
+        .btn-small {
+            min-height: 34px;
+            padding: 0 11px;
+            font-size: 13px;
+        }
+
+        /* =========================
+           SEARCH PANEL
+        ========================= */
+
+        .control-panel {
+            position: absolute;
+            z-index: 1000;
+
+            top: 100px;
+            left: 15px;
+
+            width: 300px;
+
+            background: rgba(8, 14, 21, 0.94);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+
+            padding: 14px;
+
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+
+            backdrop-filter: blur(12px);
+        }
+
+        .control-title {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #d9e1e9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            background: #111b26;
+            color: #ffffff;
+
+            outline: none;
+
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #347ac2;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .filter-row {
+            margin-top: 8px;
+        }
+
+        .admin-status {
+            margin-top: 10px;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            background: rgba(29, 95, 167, 0.18);
+            border: 1px solid rgba(29, 95, 167, 0.35);
+
+            font-size: 12px;
+            color: #b9d8f7;
+        }
+
+        .admin-status strong {
+            color: #ffffff;
+        }
+
+        /* =========================
+           ADMIN BAR
+        ========================= */
+
+        .admin-panel {
+            position: absolute;
+            z-index: 1000;
+
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            display: none;
+            align-items: center;
+            gap: 8px;
+
+            padding: 10px;
+
+            background: rgba(8, 14, 21, 0.96);
+
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        .admin-panel.visible {
+            display: flex;
+        }
+
+        .admin-mode {
+            color: #9ed0ff;
+            font-size: 12px;
+            font-weight: bold;
+
+            padding: 0 8px;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal-overlay {
+            position: fixed;
+            z-index: 3000;
+
+            inset: 0;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 500px;
+
+            max-height: 90vh;
+            overflow-y: auto;
+
+            background: #0d151e;
+
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 15px;
+
+            box-shadow: 0 20px 70px rgba(0,0,0,0.55);
+
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+
+            border-radius: 8px;
+
+            background: #172331;
+            color: #ffffff;
+
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            color: #aeb9c6;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+
+            margin-top: 18px;
+        }
+
+        .error {
+            display: none;
+
+            margin-top: 10px;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            background: rgba(180, 45, 55, 0.18);
+            border: 1px solid rgba(180, 45, 55, 0.35);
+
+            color: #ffb4b8;
+
+            font-size: 13px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .success {
+            display: none;
+
+            margin-top: 10px;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            background: rgba(40, 150, 85, 0.18);
+            border: 1px solid rgba(40, 150, 85, 0.35);
+
+            color: #a9edc3;
+
+            font-size: 13px;
+        }
+
+        .success.show {
+            display: block;
+        }
+
+        /* =========================
+           MARKERS
+        ========================= */
+
+        .shortcall-marker {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #b52e39;
+
+            border: 3px solid #ffffff;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.55),
+                0 0 0 5px rgba(181,46,57,0.25);
+
+            color: #ffffff;
+
+            font-size: 16px;
+        }
+
+        .shortcall-marker:hover {
+            transform: scale(1.12);
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #101a25;
+            color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .leaflet-popup-tip {
+            background: #101a25;
+        }
+
+        .popup-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .popup-category {
+            font-size: 11px;
+            color: #8eb9df;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .popup-text {
+            font-size: 13px;
+            line-height: 1.45;
+            color: #d5dce4;
+        }
+
+        .popup-channel {
+            margin-top: 8px;
+
+            padding: 6px 8px;
+
+            border-radius: 6px;
+
+            background: #182535;
+
+            font-size: 12px;
+        }
+
+        .popup-admin {
+            display: flex;
+            gap: 6px;
+
+            margin-top: 10px;
+        }
+
+        /* =========================
+           MAP HINT
+        ========================= */
+
+        .map-hint {
+            position: absolute;
+            z-index: 1000;
+
+            right: 15px;
+            bottom: 15px;
+
+            padding: 8px 12px;
+
+            background: rgba(8,14,21,0.85);
+
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+
+            font-size: 11px;
+            color: #adb8c4;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            position: absolute;
+            z-index: 5000;
+
+            inset: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #0b1118;
+
+            transition: opacity 0.3s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-box {
+            text-align: center;
+        }
+
+        .loading-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .loading-text {
+            font-size: 13px;
+            color: #8995a2;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                top: 8px;
+                left: 8px;
+                right: 8px;
+
+                min-height: 58px;
+
+                padding: 8px 10px;
+            }
+
+            .brand-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .brand-title {
+                font-size: 15px;
+            }
+
+            .brand-subtitle {
+                font-size: 9px;
+            }
+
+            .control-panel {
+                top: 76px;
+                left: 8px;
+
+                width: calc(100% - 16px);
+            }
+
+            .admin-panel {
+                width: calc(100% - 16px);
+                bottom: 8px;
+
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .map-hint {
+                display: none;
+            }
+
+            .header-actions .btn {
+                padding: 0 9px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div id="map"></div>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🚔
+            </div>
+
+            <div>
+                <div class="brand-title">
+                    SASP SHORTCALL MAP
+                </div>
+
+                <div class="brand-subtitle">
+                    SAN ANDREAS STATE POLICE
+                </div>
+            </div>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                class="btn btn-small"
+                id="adminLoginButton"
+                onclick="openAdminLogin()"
+            >
+                🔐 Admin Login
+            </button>
+
+            <button
+                class="btn btn-small"
+                id="logoutButton"
+                onclick="logout()"
+                style="display:none;"
+            >
+                Abmelden
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SEARCH
+    ========================== -->
+
+    <div class="control-panel">
+
+        <div class="control-title">
+            Shortcalls
+        </div>
+
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="🔎 Shortcall suchen..."
+        >
+
+        <div class="filter-row">
+
+            <select id="categoryFilter">
+
+                <option value="">
+                    Alle Kategorien
+                </option>
+
+                <option value="Verkehr">
+                    Verkehr
+                </option>
+
+                <option value="Unfall">
+                    Unfall
+                </option>
+
+                <option value="Schießerei">
+                    Schießerei
+                </option>
+
+                <option value="Einbruch">
+                    Einbruch
+                </option>
+
+                <option value="Verfolgung">
+                    Verfolgung
+                </option>
+
+                <option value="Sonstiges">
+                    Sonstiges
+                </option>
+
+            </select>
+
+        </div>
+
+        <div
+            class="admin-status"
+            id="adminStatus"
+        >
+            Öffentliche Ansicht – kein Login erforderlich.
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ADMIN PANEL
+    ========================== -->
+
+    <div
+        class="admin-panel"
+        id="adminPanel"
+    >
+
+        <div class="admin-mode">
+            👑 ADMIN-MODUS
+        </div>
+
+        <button
+            class="btn btn-primary btn-small"
+            onclick="startAddPoint()"
+        >
+            ➕ Punkt setzen
+        </button>
+
+        <button
+            class="btn btn-small"
+            onclick="refreshPoints()"
+        >
+            🔄 Aktualisieren
+        </button>
+
+    </div>
+
+
+    <div class="map-hint">
+        SASP Shortcall Map
+    </div>
+
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    <div
+        class="loading"
+        id="loadingScreen"
+    >
+
+        <div class="loading-box">
+
+            <div class="loading-title">
+                SASP SHORTCALL MAP
+            </div>
+
+            <div class="loading-text">
+                Karte wird geladen...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ADMIN LOGIN MODAL
+    ========================== -->
+
+    <div
+        class="modal-overlay"
+        id="loginModal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+                    🔐 SASP Admin Login
+                </div>
+
+                <button
+                    class="close-btn"
+                    onclick="closeModal('loginModal')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    E-Mail
+                </label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="admin@sasp-rp.de"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Passwort
+                </label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Passwort"
+                >
+
+            </div>
+
+            <div
+                class="error"
+                id="loginError"
+            ></div>
+
+            <div class="form-actions">
+
+                <button
+                    class="btn"
+                    onclick="closeModal('loginModal')"
+                >
+                    Abbrechen
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="login()"
+                >
+                    Einloggen
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         POINT MODAL
+    ========================== -->
+
+    <div
+        class="modal-overlay"
+        id="pointModal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div
+                    class="modal-title"
+                    id="pointModalTitle"
+                >
+                    📍 Shortcall hinzufügen
+                </div>
+
+                <button
+                    class="close-btn"
+                    onclick="closeModal('pointModal')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <input
+                type="hidden"
+                id="pointId"
+            >
+
+            <input
+                type="hidden"
+                id="pointLat"
+            >
+
+            <input
+                type="hidden"
+                id="pointLng"
+            >
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Name / Titel
+                </label>
+
+                <input
+                    id="pointName"
+                    type="text"
+                    placeholder="z. B. Verkehrsunfall"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Kategorie
+                </label>
+
+                <select id="pointCategory">
+
+                    <option value="Verkehr">
+                        Verkehr
+                    </option>
+
+                    <option value="Unfall">
+                        Unfall
+                    </option>
+
+                    <option value="Schießerei">
+                        Schießerei
+                    </option>
+
+                    <option value="Einbruch">
+                        Einbruch
+                    </option>
+
+                    <option value="Verfolgung">
+                        Verfolgung
+                    </option>
+
+                    <option value="Sonstiges">
+                        Sonstiges
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Funkkanal
+                </label>
+
+                <input
+                    id="pointChannel"
+                    type="text"
+                    placeholder="z. B. TAC 1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Beschreibung
+                </label>
+
+                <textarea
+                    id="pointDescription"
+                    placeholder="Weitere Informationen..."
+                ></textarea>
+
+            </div>
+
+
+            <div
+                class="error"
+                id="pointError"
+            ></div>
+
+            <div
+                class="success"
+                id="pointSuccess"
+            ></div>
+
+
+            <div class="form-actions">
+
+                <button
+                    class="btn"
+                    onclick="closeModal('pointModal')"
+                >
+                    Abbrechen
+                </button>
+
+                <button
+                    class="btn btn-danger"
+                    id="deletePointButton"
+                    onclick="deletePoint()"
+                    style="display:none;"
+                >
+                    Löschen
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="savePoint()"
+                >
+                    Speichern
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SCRIPTS
+========================== -->
+
+<script src="config.js"></script>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+    /*
+     * =====================================================
+     * SASP SHORTCALL MAP
+     * =====================================================
+     */
+
+    const IMAGE_SIZE = 2048;
+
+    let supabaseClient = null;
+
+    let map = null;
+
+    let points = [];
+
+    let markerLayer = null;
+
+    let isAdmin = false;
+
+    let currentUser = null;
+
+    let addingPoint = false;
+
+
+    /*
+     * =====================================================
+     * START
+     * =====================================================
+     */
+
+    document.addEventListener("DOMContentLoaded", async () => {
+
+        try {
+
+            initializeSupabase();
+
+            initializeMap();
+
+            setupEvents();
+
+            await checkSession();
+
+            await loadPoints();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Die Seite konnte nicht vollständig geladen werden. " +
+                "Bitte prüfe deine config.js und die Supabase-Einstellungen."
+            );
+
+        }
+
+        document
+            .getElementById("loadingScreen")
+            .classList.add("hidden");
+
+    });
+
+
+    /*
+     * =====================================================
+     * SUPABASE
+     * =====================================================
+     */
+
+    function initializeSupabase() {
+
+        if (
+            typeof SUPABASE_URL === "undefined" ||
+            typeof SUPABASE_PUBLISHABLE_KEY === "undefined"
+        ) {
+
+            throw new Error(
+                "SUPABASE_URL oder SUPABASE_PUBLISHABLE_KEY fehlt."
+            );
+
+        }
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+
+    }
+
+
+    /*
+     * =====================================================
+     * MAP
+     * =====================================================
+     */
+
+    function initializeMap() {
+
+        map = L.map("map", {
+
+            crs: L.CRS.Simple,
+
+            minZoom: -2,
+
+            maxZoom: 3,
+
+            zoomSnap: 0.25,
+
+            zoomDelta: 0.5,
+
+            attributionControl: false
+
+        });
+
+
+        const bounds = [
+            [0, 0],
+            [IMAGE_SIZE, IMAGE_SIZE]
+        ];
+
+
+        L.imageOverlay(
+            "map.jpg",
+            bounds
+        ).addTo(map);
+
+
+        map.fitBounds(bounds);
+
+
+        markerLayer = L.layerGroup().addTo(map);
+
+
+        map.on("click", event => {
+
+            if (!isAdmin || !addingPoint) {
+                return;
+            }
+
+
+            const x = event.latlng.lng;
+
+            const y =
+                IMAGE_SIZE -
+                event.latlng.lat;
+
+
+            openNewPointModal(
+                x,
+                y
+            );
+
+            addingPoint = false;
+
+        });
+
+    }
+
+
+    /*
+     * =====================================================
+     * EVENTS
+     * =====================================================
+     */
+
+    function setupEvents() {
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "input",
+                renderMarkers
+            );
+
+
+        document
+            .getElementById("categoryFilter")
+            .addEventListener(
+                "change",
+                renderMarkers
+            );
+
+
+        document
+            .getElementById("loginPassword")
+            .addEventListener(
+                "keydown",
+                event => {
+
+                    if (event.key === "Enter") {
+
+                        login();
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    /*
+     * =====================================================
+     * SESSION
+     * =====================================================
+     */
+
+    async function checkSession() {
+
+        const {
+            data
+        } = await supabaseClient
+            .auth
+            .getSession();
+
+
+        if (
+            data &&
+            data.session
+        ) {
+
+            await setUser(
+                data.session.user
+            );
+
+        }
+
+
+        supabaseClient
+            .auth
+            .onAuthStateChange(
+                async (
+                    event,
+                    session
+                ) => {
+
+                    if (session) {
+
+                        await setUser(
+                            session.user
+                        );
+
+                    } else {
+
+                        clearAdmin();
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    /*
+     * =====================================================
+     * USER
+     * =====================================================
+     */
+
+    async function setUser(user) {
+
+        currentUser = user;
+
+        isAdmin = false;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select("is_admin, display_name")
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+        if (
+            data &&
+            data.is_admin === true
+        ) {
+
+            isAdmin = true;
+
+        }
+
+
+        updateAdminUI();
+
+    }
+
+
+    function clearAdmin() {
+
+        currentUser = null;
+
+        isAdmin = false;
+
+        addingPoint = false;
+
+        updateAdminUI();
+
+    }
+
+
+    function updateAdminUI() {
+
+        const loginButton =
+            document.getElementById(
+                "adminLoginButton"
+            );
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+        const adminPanel =
+            document.getElementById(
+                "adminPanel"
+            );
+
+        const adminStatus =
+            document.getElementById(
+                "adminStatus"
+            );
+
+
+        if (isAdmin) {
+
+            loginButton.style.display =
+                "none";
+
+            logoutButton.style.display =
+                "block";
+
+            adminPanel.classList.add(
+                "visible"
+            );
+
+            adminStatus.innerHTML =
+                "<strong>👑 Admin-Modus aktiv</strong><br>" +
+                "Du kannst Shortcalls hinzufügen, bearbeiten und löschen.";
+
+        } else {
+
+            loginButton.style.display =
+                "block";
+
+            logoutButton.style.display =
+                "none";
+
+            adminPanel.classList.remove(
+                "visible"
+            );
+
+            adminStatus.innerHTML =
+                "Öffentliche Ansicht – kein Login erforderlich.";
+
+        }
+
+    }
+
+
+    /*
+     * =====================================================
+     * LOGIN
+     * =====================================================
+     */
+
+    function openAdminLogin() {
+
+        document
+            .getElementById("loginError")
+            .classList.remove("show");
+
+        document
+            .getElementById("loginModal")
+            .classList.add("open");
+
+    }
+
+
+    async function login() {
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
+
+
+        const errorBox =
+            document
+                .getElementById("loginError");
+
+
+        errorBox.classList.remove(
+            "show"
+        );
+
+
+        if (!email || !password) {
+
+            errorBox.textContent =
+                "Bitte E-Mail und Passwort eingeben.";
+
+            errorBox.classList.add(
+                "show"
+            );
+
+            return;
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .auth
+            .signInWithPassword({
+                email,
+                password
+            });
+
+
+        if (error) {
+
+            errorBox.textContent =
+                error.message;
+
+            errorBox.classList.add(
+                "show"
+            );
+
+            return;
+
+        }
+
+
+        await setUser(
+            data.user
+        );
+
+
+        if (!isAdmin) {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+
+            errorBox.textContent =
+                "Dieser Benutzer besitzt keine Admin-Rechte.";
+
+            errorBox.classList.add(
+                "show"
+            );
+
+            return;
+
+        }
+
+
+        closeModal(
+            "loginModal"
+        );
+
+
+        document
+            .getElementById("loginEmail")
+            .value = "";
+
+        document
+            .getElementById("loginPassword")
+            .value = "";
+
+    }
+
+
+    async function logout() {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+
+    /*
+     * =====================================================
+     * LOAD POINTS
+     * =====================================================
+     */
+
+    async function loadPoints() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("shortcall_points")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+        points = data || [];
+
+        renderMarkers();
+
+    }
+
+
+    async function refreshPoints() {
+
+        await loadPoints();
+
+    }
+
+
+    /*
+     * =====================================================
+     * RENDER MARKERS
+     * =====================================================
+     */
+
+    function renderMarkers() {
+
+        if (!markerLayer) {
+            return;
+        }
+
+
+        markerLayer.clearLayers();
+
+
+        const search =
+            document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        const category =
+            document
+                .getElementById("categoryFilter")
+                .value;
+
+
+        points
+            .filter(point => {
+
+                const combined = (
+
+                    (point.name || "") +
+                    " " +
+                    (point.description || "") +
+                    " " +
+                    (point.channel || "") +
+                    " " +
+                    (point.category || "")
+
+                ).toLowerCase();
+
+
+                if (
+                    search &&
+                    !combined.includes(search)
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    category &&
+                    point.category !== category
+                ) {
+
+                    return false;
+
+                }
+
+
+                return true;
+
+            })
+            .forEach(point => {
+
+                createMarker(point);
+
+            });
+
+    }
+
+
+    /*
+     * =====================================================
+     * MARKER
+     * =====================================================
+     */
+
+    function createMarker(point) {
+
+        /*
+         * DB:
+         * lat = Bild-Y
+         * lng = Bild-X
+         */
+
+        const imageX =
+            Number(point.lng);
+
+        const imageY =
+            Number(point.lat);
+
+
+        const mapLat =
+            IMAGE_SIZE -
+            imageY;
+
+
+        const mapLng =
+            imageX;
+
+
+        const icon =
+            L.divIcon({
+
+                className: "",
+
+                html:
+                    '<div class="shortcall-marker">📍</div>',
+
+                iconSize: [
+                    34,
+                    34
+                ],
+
+                iconAnchor: [
+                    17,
+                    17
+                ],
+
+                popupAnchor: [
+                    0,
+                    -17
+                ]
+
+            });
+
+
+        const marker =
+            L.marker(
+                [
+                    mapLat,
+                    mapLng
+                ],
+                {
+                    icon
+                }
+            );
+
+
+        let popup = `
+
+            <div class="popup-title">
+                ${escapeHtml(point.name)}
+            </div>
+
+            <div class="popup-category">
+                ${escapeHtml(point.category || "Shortcall")}
+            </div>
+
+        `;
+
+
+        if (point.description) {
+
+            popup += `
+
+                <div class="popup-text">
+                    ${escapeHtml(point.description)}
+                </div>
+
+            `;
+
+        }
+
+
+        if (point.channel) {
+
+            popup += `
+
+                <div class="popup-channel">
+                    📻 Funk: <strong>
+                    ${escapeHtml(point.channel)}
+                    </strong>
+                </div>
+
+            `;
+
+        }
+
+
+        if (isAdmin) {
+
+            popup += `
+
+                <div class="popup-admin">
+
+                    <button
+                        class="btn btn-small"
+                        onclick="openEditPoint('${point.id}')"
+                    >
+                        ✏️ Bearbeiten
+                    </button>
+
+                </div>
+
+            `;
+
+        }
+
+
+        marker
+            .bindPopup(popup)
+            .addTo(markerLayer);
+
+    }
+
+
+    /*
+     * =====================================================
+     * ADD POINT
+     * =====================================================
+     */
+
+    function startAddPoint() {
+
+        if (!isAdmin) {
+
+            alert(
+                "Du benötigst Admin-Rechte."
+            );
+
+            return;
+
+        }
+
+
+        addingPoint = true;
+
+
+        alert(
+            "Klicke jetzt auf die gewünschte Stelle auf der Karte."
+        );
+
+    }
+
+
+    function openNewPointModal(
+        x,
+        y
+    ) {
+
+        document
+            .getElementById("pointModalTitle")
+            .textContent =
+                "📍 Shortcall hinzufügen";
+
+
+        document
+            .getElementById("pointId")
+            .value = "";
+
+
+        document
+            .getElementById("pointLat")
+            .value = y;
+
+
+        document
+            .getElementById("pointLng")
+            .value = x;
+
+
+        document
+            .getElementById("pointName")
+            .value = "";
+
+
+        document
+            .getElementById("pointCategory")
+            .value = "Verkehr";
+
+
+        document
+            .getElementById("pointChannel")
+            .value = "";
+
+
+        document
+            .getElementById("pointDescription")
+            .value = "";
+
+
+        document
+            .getElementById("deletePointButton")
+            .style.display =
+                "none";
+
+
+        clearPointMessages();
+
+
+        document
+            .getElementById("pointModal")
+            .classList.add("open");
+
+    }
+
+
+    /*
+     * =====================================================
+     * EDIT POINT
+     * =====================================================
+     */
+
+    function openEditPoint(id) {
+
+        if (!isAdmin) {
+            return;
+        }
+
+
+        const point =
+            points.find(
+                item =>
+                    item.id === id
+            );
+
+
+        if (!point) {
+            return;
+        }
+
+
+        document
+            .getElementById("pointModalTitle")
+            .textContent =
+                "✏️ Shortcall bearbeiten";
+
+
+        document
+            .getElementById("pointId")
+            .value =
+                point.id;
+
+
+        document
+            .getElementById("pointLat")
+            .value =
+                point.lat;
+
+
+        document
+            .getElementById("pointLng")
+            .value =
+                point.lng;
+
+
+        document
+            .getElementById("pointName")
+            .value =
+                point.name || "";
+
+
+        document
+            .getElementById("pointCategory")
+            .value =
+                point.category || "Sonstiges";
+
+
+        document
+            .getElementById("pointChannel")
+            .value =
+                point.channel || "";
+
+
+        document
+            .getElementById("pointDescription")
+            .value =
+                point.description || "";
+
+
+        document
+            .getElementById("deletePointButton")
+            .style.display =
+                "block";
+
+
+        clearPointMessages();
+
+
+        document
+            .getElementById("pointModal")
+            .classList.add("open");
+
+    }
+
+
+    /*
+     * =====================================================
+     * SAVE POINT
+     * =====================================================
+     */
+
+    async function savePoint() {
+
+        if (!isAdmin) {
+
+            showPointError(
+                "Keine Admin-Berechtigung."
+            );
+
+            return;
+
+        }
+
+
+        const id =
+            document
+                .getElementById("pointId")
+                .value;
+
+
+        const name =
+            document
+                .getElementById("pointName")
+                .value
+                .trim();
+
+
+        const category =
+            document
+                .getElementById("pointCategory")
+                .value;
+
+
+        const channel =
+            document
+                .getElementById("pointChannel")
+                .value
+                .trim();
+
+
+        const description =
+            document
+                .getElementById("pointDescription")
+                .value
+                .trim();
+
+
+        const lat =
+            Number(
+                document
+                    .getElementById("pointLat")
+                    .value
+            );
+
+
+        const lng =
+            Number(
+                document
+                    .getElementById("pointLng")
+                    .value
+            );
+
+
+        if (!name) {
+
+            showPointError(
+                "Bitte einen Namen eingeben."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            Number.isNaN(lat) ||
+            Number.isNaN(lng)
+        ) {
+
+            showPointError(
+                "Ungültige Kartenposition."
+            );
+
+            return;
+
+        }
+
+
+        const payload = {
+
+            name,
+
+            category,
+
+            channel:
+                channel || null,
+
+            description:
+                description || null,
+
+            lat,
+
+            lng
+
+        };
+
+
+        let result;
+
+
+        if (id) {
+
+            result =
+                await supabaseClient
+                    .from(
+                        "shortcall_points"
+                    )
+                    .update(payload)
+                    .eq(
+                        "id",
+                        id
+                    );
+
+        } else {
+
+            payload.created_by =
+                currentUser
+                    ? currentUser.id
+                    : null;
+
+
+            result =
+                await supabaseClient
+                    .from(
+                        "shortcall_points"
+                    )
+                    .insert(
+                        payload
+                    );
+
+        }
+
+
+        if (result.error) {
+
+            console.error(
+                result.error
+            );
+
+
+            showPointError(
+                result.error.message
+            );
+
+            return;
+
+        }
+
+
+        showPointSuccess(
+            "Shortcall erfolgreich gespeichert."
+        );
+
+
+        await loadPoints();
+
+
+        setTimeout(
+            () => {
+
+                closeModal(
+                    "pointModal"
+                );
+
+            },
+            500
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * DELETE POINT
+     * =====================================================
+     */
+
+    async function deletePoint() {
+
+        if (!isAdmin) {
+            return;
+        }
+
+
+        const id =
+            document
+                .getElementById("pointId")
+                .value;
+
+
+        if (!id) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                "Möchtest du diesen Shortcall wirklich löschen?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from(
+                "shortcall_points"
+            )
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            showPointError(
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        closeModal(
+            "pointModal"
+        );
+
+
+        await loadPoints();
+
+    }
+
+
+    /*
+     * =====================================================
+     * MODAL
+     * =====================================================
+     */
+
+    function closeModal(id) {
+
+        document
+            .getElementById(id)
+            .classList.remove(
+                "open"
+            );
+
+    }
+
+
+    function clearPointMessages() {
+
+        document
+            .getElementById("pointError")
+            .classList.remove(
+                "show"
+            );
+
+
+        document
+            .getElementById("pointSuccess")
+            .classList.remove(
+                "show"
+            );
+
+    }
+
+
+    function showPointError(message) {
+
+        const box =
+            document
+                .getElementById(
+                    "pointError"
+                );
+
+
+        box.textContent =
+            message;
+
+
+        box.classList.add(
+            "show"
+        );
+
+    }
+
+
+    function showPointSuccess(message) {
+
+        const box =
+            document
+                .getElementById(
+                    "pointSuccess"
+                );
+
+
+        box.textContent =
+            message;
+
+
+        box.classList.add(
+            "show"
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * HTML SECURITY
+     * =====================================================
+     */
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /*
+     * =====================================================
+     * CLOSE MODALS WITH BACKDROP CLICK
+     * =====================================================
+     */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.classList.contains(
+                    "modal-overlay"
+                )
+            ) {
+
+                event.target.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
