@@ -1152,21 +1152,27 @@
 
     function initializeMap() {
 
-        map = L.map("map", {
+    map = L.map("map", {
 
-            crs: L.CRS.Simple,
+    crs: L.CRS.Simple,
 
-            minZoom: -2,
+    minZoom: -2,
 
-            maxZoom: 3,
+    maxZoom: 3,
 
-            zoomSnap: 0.25,
+    zoomSnap: 0.25,
 
-            zoomDelta: 0.5,
+    zoomDelta: 0.5,
 
-            attributionControl: false
+    attributionControl: false,
 
-        });
+    zoomControl: false
+
+});
+
+L.control.zoom({
+    position: "bottomleft"
+}).addTo(map);
 
 
         const bounds = [
