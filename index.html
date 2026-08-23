@@ -26,7 +26,7 @@
             overflow: hidden;
             font-family: Arial, Helvetica, sans-serif;
             background: #0b1118;
-            color: #ffffff;
+            color: #fff;
         }
 
         #app {
@@ -43,7 +43,7 @@
 
         /* =========================
            HEADER
-        ========================= */
+        ========================== */
 
         .topbar {
             position: absolute;
@@ -65,7 +65,6 @@
             border-radius: 14px;
 
             box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-
             backdrop-filter: blur(12px);
         }
 
@@ -112,7 +111,7 @@
 
         /* =========================
            BUTTONS
-        ========================= */
+        ========================== */
 
         button {
             border: 0;
@@ -126,7 +125,7 @@
 
             border-radius: 9px;
 
-            color: #ffffff;
+            color: #fff;
             background: #1c2938;
 
             border: 1px solid rgba(255,255,255,0.12);
@@ -161,8 +160,8 @@
         }
 
         /* =========================
-           SEARCH PANEL
-        ========================= */
+           SEARCH
+        ========================== */
 
         .control-panel {
             position: absolute;
@@ -180,7 +179,6 @@
             padding: 14px;
 
             box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-
             backdrop-filter: blur(12px);
         }
 
@@ -188,7 +186,9 @@
             font-size: 13px;
             font-weight: 800;
             margin-bottom: 10px;
+
             color: #d9e1e9;
+
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -205,7 +205,7 @@
             border: 1px solid rgba(255,255,255,0.12);
 
             background: #111b26;
-            color: #ffffff;
+            color: #fff;
 
             outline: none;
 
@@ -242,12 +242,12 @@
         }
 
         .admin-status strong {
-            color: #ffffff;
+            color: #fff;
         }
 
         /* =========================
-           ADMIN BAR
-        ========================= */
+           ADMIN PANEL
+        ========================== */
 
         .admin-panel {
             position: absolute;
@@ -279,13 +279,12 @@
             color: #9ed0ff;
             font-size: 12px;
             font-weight: bold;
-
             padding: 0 8px;
         }
 
         /* =========================
            MODAL
-        ========================= */
+        ========================== */
 
         .modal-overlay {
             position: fixed;
@@ -344,7 +343,7 @@
             border-radius: 8px;
 
             background: #172331;
-            color: #ffffff;
+            color: #fff;
 
             font-size: 18px;
         }
@@ -415,8 +414,8 @@
         }
 
         /* =========================
-           MARKERS
-        ========================= */
+           MARKER
+        ========================== */
 
         .shortcall-marker {
             width: 34px;
@@ -430,13 +429,13 @@
 
             background: #b52e39;
 
-            border: 3px solid #ffffff;
+            border: 3px solid #fff;
 
             box-shadow:
                 0 3px 12px rgba(0,0,0,0.55),
                 0 0 0 5px rgba(181,46,57,0.25);
 
-            color: #ffffff;
+            color: #fff;
 
             font-size: 16px;
         }
@@ -445,9 +444,21 @@
             transform: scale(1.12);
         }
 
+        .treffpunkt-marker {
+            background: #2473b8;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.55),
+                0 0 0 5px rgba(36,115,184,0.25);
+        }
+
+        /* =========================
+           POPUP
+        ========================== */
+
         .leaflet-popup-content-wrapper {
             background: #101a25;
-            color: #ffffff;
+            color: #fff;
             border-radius: 10px;
         }
 
@@ -464,7 +475,9 @@
         .popup-category {
             font-size: 11px;
             color: #8eb9df;
+
             text-transform: uppercase;
+
             margin-bottom: 8px;
         }
 
@@ -472,18 +485,6 @@
             font-size: 13px;
             line-height: 1.45;
             color: #d5dce4;
-        }
-
-        .popup-channel {
-            margin-top: 8px;
-
-            padding: 6px 8px;
-
-            border-radius: 6px;
-
-            background: #182535;
-
-            font-size: 12px;
         }
 
         .popup-admin {
@@ -494,30 +495,8 @@
         }
 
         /* =========================
-           MAP HINT
-        ========================= */
-
-        .map-hint {
-            position: absolute;
-            z-index: 1000;
-
-            right: 15px;
-            bottom: 15px;
-
-            padding: 8px 12px;
-
-            background: rgba(8,14,21,0.85);
-
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-
-            font-size: 11px;
-            color: #adb8c4;
-        }
-
-        /* =========================
            LOADING
-        ========================= */
+        ========================== */
 
         .loading {
             position: absolute;
@@ -556,7 +535,7 @@
 
         /* =========================
            MOBILE
-        ========================= */
+        ========================== */
 
         @media (max-width: 700px) {
 
@@ -599,10 +578,6 @@
                 flex-wrap: wrap;
             }
 
-            .map-hint {
-                display: none;
-            }
-
             .header-actions .btn {
                 padding: 0 9px;
                 font-size: 12px;
@@ -617,9 +592,7 @@
 
     <div id="map"></div>
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+    <!-- HEADER -->
 
     <div class="topbar">
 
@@ -665,9 +638,7 @@
     </div>
 
 
-    <!-- =========================
-         SEARCH
-    ========================== -->
+    <!-- SUCH- UND FILTERPANEL -->
 
     <div class="control-panel">
 
@@ -689,17 +660,15 @@
                     Alle Kategorien
                 </option>
 
-                <select id="pointCategory">
+                <option value="Shortcall">
+                    Shortcall
+                </option>
 
-    <option value="Shortcall">
-        Shortcall
-    </option>
+                <option value="Treffpunkt">
+                    Treffpunkt
+                </option>
 
-    <option value="Treffpunkt">
-        Treffpunkt
-    </option>
-
-</select>
+            </select>
 
         </div>
 
@@ -713,9 +682,7 @@
     </div>
 
 
-    <!-- =========================
-         ADMIN PANEL
-    ========================== -->
+    <!-- ADMIN PANEL -->
 
     <div
         class="admin-panel"
@@ -743,14 +710,7 @@
     </div>
 
 
-    <div class="map-hint">
-        SASP Shortcall Map
-    </div>
-
-
-    <!-- =========================
-         LOADING
-    ========================== -->
+    <!-- LOADING -->
 
     <div
         class="loading"
@@ -772,9 +732,7 @@
     </div>
 
 
-    <!-- =========================
-         ADMIN LOGIN MODAL
-    ========================== -->
+    <!-- LOGIN MODAL -->
 
     <div
         class="modal-overlay"
@@ -807,7 +765,7 @@
                 <input
                     id="loginEmail"
                     type="email"
-                    placeholder="admin@sasp-rp.de"
+                    placeholder="Admin E-Mail"
                 >
 
             </div>
@@ -854,9 +812,7 @@
     </div>
 
 
-    <!-- =========================
-         POINT MODAL
-    ========================== -->
+    <!-- PUNKT MODAL -->
 
     <div
         class="modal-overlay"
@@ -871,7 +827,7 @@
                     class="modal-title"
                     id="pointModalTitle"
                 >
-                    📍 Shortcall hinzufügen
+                    📍 Punkt hinzufügen
                 </div>
 
                 <button
@@ -899,6 +855,8 @@
             >
 
 
+            <!-- NAME -->
+
             <div class="form-group">
 
                 <label class="form-label">
@@ -908,11 +866,13 @@
                 <input
                     id="pointName"
                     type="text"
-                    placeholder="z. B. Verkehrsunfall"
+                    placeholder="z. B. Tankstelle oder Verkehrsunfall"
                 >
 
             </div>
 
+
+            <!-- KATEGORIE -->
 
             <div class="form-group">
 
@@ -922,17 +882,20 @@
 
                 <select id="pointCategory">
 
-                <option value="Shortcall">
-    Shortcall
-</option>
+                    <option value="Shortcall">
+                        Shortcall
+                    </option>
 
-<option value="Treffpunkt">
-    Treffpunkt
-</option>    
+                    <option value="Treffpunkt">
+                        Treffpunkt
+                    </option>
 
                 </select>
 
             </div>
+
+
+            <!-- BESCHREIBUNG -->
 
             <div class="form-group">
 
@@ -993,9 +956,7 @@
 </div>
 
 
-<!-- =========================
-     SCRIPTS
-========================== -->
+<!-- SCRIPTS -->
 
 <script src="config.js"></script>
 
@@ -1009,11 +970,9 @@
 
 <script>
 
-    /*
-     * =====================================================
-     * SASP SHORTCALL MAP
-     * =====================================================
-     */
+    /* =========================
+       KONFIGURATION
+    ========================== */
 
     const IMAGE_SIZE = 2048;
 
@@ -1032,49 +991,48 @@
     let addingPoint = false;
 
 
-    /*
-     * =====================================================
-     * START
-     * =====================================================
-     */
+    /* =========================
+       START
+    ========================== */
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
 
-        try {
+            try {
 
-            initializeSupabase();
+                initializeSupabase();
 
-            initializeMap();
+                initializeMap();
 
-            setupEvents();
+                setupEvents();
 
-            await checkSession();
+                await checkSession();
 
-            await loadPoints();
+                await loadPoints();
 
-        } catch (error) {
+            } catch (error) {
 
-            console.error(error);
+                console.error(error);
 
-            alert(
-                "Die Seite konnte nicht vollständig geladen werden. " +
-                "Bitte prüfe deine config.js und die Supabase-Einstellungen."
-            );
+                alert(
+                    "Die Seite konnte nicht vollständig geladen werden. " +
+                    "Bitte prüfe deine config.js und Supabase-Einstellungen."
+                );
+
+            }
+
+            document
+                .getElementById("loadingScreen")
+                .classList.add("hidden");
 
         }
-
-        document
-            .getElementById("loadingScreen")
-            .classList.add("hidden");
-
-    });
+    );
 
 
-    /*
-     * =====================================================
-     * SUPABASE
-     * =====================================================
-     */
+    /* =========================
+       SUPABASE
+    ========================== */
 
     function initializeSupabase() {
 
@@ -1098,35 +1056,37 @@
     }
 
 
-    /*
-     * =====================================================
-     * MAP
-     * =====================================================
-     */
+    /* =========================
+       MAP
+    ========================== */
 
     function initializeMap() {
 
-    map = L.map("map", {
+        map = L.map(
+            "map",
+            {
+                crs: L.CRS.Simple,
 
-    crs: L.CRS.Simple,
+                minZoom: -2,
 
-    minZoom: -2,
+                maxZoom: 3,
 
-    maxZoom: 3,
+                zoomSnap: 0.25,
 
-    zoomSnap: 0.25,
+                zoomDelta: 0.5,
 
-    zoomDelta: 0.5,
+                attributionControl: false,
 
-    attributionControl: false,
+                zoomControl: false
+            }
+        );
 
-    zoomControl: false
 
-});
+        /* Zoom unten links */
 
-L.control.zoom({
-    position: "bottomleft"
-}).addTo(map);
+        L.control.zoom({
+            position: "bottomleft"
+        }).addTo(map);
 
 
         const bounds = [
@@ -1144,40 +1104,48 @@ L.control.zoom({
         map.fitBounds(bounds);
 
 
-        markerLayer = L.layerGroup().addTo(map);
+        markerLayer =
+            L.layerGroup().addTo(map);
 
 
-        map.on("click", event => {
+        map.on(
+            "click",
+            event => {
 
-            if (!isAdmin || !addingPoint) {
-                return;
+                if (
+                    !isAdmin ||
+                    !addingPoint
+                ) {
+                    return;
+                }
+
+
+                const x =
+                    event.latlng.lng;
+
+
+                const y =
+                    IMAGE_SIZE -
+                    event.latlng.lat;
+
+
+                openNewPointModal(
+                    x,
+                    y
+                );
+
+
+                addingPoint = false;
+
             }
-
-
-            const x = event.latlng.lng;
-
-            const y =
-                IMAGE_SIZE -
-                event.latlng.lat;
-
-
-            openNewPointModal(
-                x,
-                y
-            );
-
-            addingPoint = false;
-
-        });
+        );
 
     }
 
 
-    /*
-     * =====================================================
-     * EVENTS
-     * =====================================================
-     */
+    /* =========================
+       EVENTS
+    ========================== */
 
     function setupEvents() {
 
@@ -1203,7 +1171,9 @@ L.control.zoom({
                 "keydown",
                 event => {
 
-                    if (event.key === "Enter") {
+                    if (
+                        event.key === "Enter"
+                    ) {
 
                         login();
 
@@ -1215,19 +1185,18 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * SESSION
-     * =====================================================
-     */
+    /* =========================
+       SESSION
+    ========================== */
 
     async function checkSession() {
 
         const {
             data
-        } = await supabaseClient
-            .auth
-            .getSession();
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
 
 
         if (
@@ -1268,11 +1237,9 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * USER
-     * =====================================================
-     */
+    /* =========================
+       USER
+    ========================== */
 
     async function setUser(user) {
 
@@ -1284,11 +1251,17 @@ L.control.zoom({
         const {
             data,
             error
-        } = await supabaseClient
-            .from("profiles")
-            .select("is_admin, display_name")
-            .eq("id", user.id)
-            .maybeSingle();
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "is_admin, display_name"
+                )
+                .eq(
+                    "id",
+                    user.id
+                )
+                .maybeSingle();
 
 
         if (error) {
@@ -1312,6 +1285,8 @@ L.control.zoom({
 
         updateAdminUI();
 
+        renderMarkers();
+
     }
 
 
@@ -1325,6 +1300,8 @@ L.control.zoom({
 
         updateAdminUI();
 
+        renderMarkers();
+
     }
 
 
@@ -1335,15 +1312,18 @@ L.control.zoom({
                 "adminLoginButton"
             );
 
+
         const logoutButton =
             document.getElementById(
                 "logoutButton"
             );
 
+
         const adminPanel =
             document.getElementById(
                 "adminPanel"
             );
+
 
         const adminStatus =
             document.getElementById(
@@ -1356,28 +1336,34 @@ L.control.zoom({
             loginButton.style.display =
                 "none";
 
+
             logoutButton.style.display =
                 "block";
+
 
             adminPanel.classList.add(
                 "visible"
             );
 
+
             adminStatus.innerHTML =
                 "<strong>👑 Admin-Modus aktiv</strong><br>" +
-                "Du kannst Shortcalls hinzufügen, bearbeiten und löschen.";
+                "Du kannst Punkte hinzufügen, bearbeiten und löschen.";
 
         } else {
 
             loginButton.style.display =
                 "block";
 
+
             logoutButton.style.display =
                 "none";
+
 
             adminPanel.classList.remove(
                 "visible"
             );
+
 
             adminStatus.innerHTML =
                 "Öffentliche Ansicht – kein Login erforderlich.";
@@ -1387,21 +1373,24 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * LOGIN
-     * =====================================================
-     */
+    /* =========================
+       LOGIN
+    ========================== */
 
     function openAdminLogin() {
 
         document
             .getElementById("loginError")
-            .classList.remove("show");
+            .classList.remove(
+                "show"
+            );
+
 
         document
             .getElementById("loginModal")
-            .classList.add("open");
+            .classList.add(
+                "open"
+            );
 
     }
 
@@ -1410,20 +1399,25 @@ L.control.zoom({
 
         const email =
             document
-                .getElementById("loginEmail")
+                .getElementById(
+                    "loginEmail"
+                )
                 .value
                 .trim();
 
 
         const password =
             document
-                .getElementById("loginPassword")
+                .getElementById(
+                    "loginPassword"
+                )
                 .value;
 
 
         const errorBox =
-            document
-                .getElementById("loginError");
+            document.getElementById(
+                "loginError"
+            );
 
 
         errorBox.classList.remove(
@@ -1431,14 +1425,19 @@ L.control.zoom({
         );
 
 
-        if (!email || !password) {
+        if (
+            !email ||
+            !password
+        ) {
 
             errorBox.textContent =
                 "Bitte E-Mail und Passwort eingeben.";
 
+
             errorBox.classList.add(
                 "show"
             );
+
 
             return;
 
@@ -1448,12 +1447,13 @@ L.control.zoom({
         const {
             data,
             error
-        } = await supabaseClient
-            .auth
-            .signInWithPassword({
-                email,
-                password
-            });
+        } =
+            await supabaseClient
+                .auth
+                .signInWithPassword({
+                    email,
+                    password
+                });
 
 
         if (error) {
@@ -1461,9 +1461,11 @@ L.control.zoom({
             errorBox.textContent =
                 error.message;
 
+
             errorBox.classList.add(
                 "show"
             );
+
 
             return;
 
@@ -1485,9 +1487,11 @@ L.control.zoom({
             errorBox.textContent =
                 "Dieser Benutzer besitzt keine Admin-Rechte.";
 
+
             errorBox.classList.add(
                 "show"
             );
+
 
             return;
 
@@ -1500,11 +1504,16 @@ L.control.zoom({
 
 
         document
-            .getElementById("loginEmail")
+            .getElementById(
+                "loginEmail"
+            )
             .value = "";
 
+
         document
-            .getElementById("loginPassword")
+            .getElementById(
+                "loginPassword"
+            )
             .value = "";
 
     }
@@ -1519,26 +1528,27 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * LOAD POINTS
-     * =====================================================
-     */
+    /* =========================
+       PUNKTE LADEN
+    ========================== */
 
     async function loadPoints() {
 
         const {
             data,
             error
-        } = await supabaseClient
-            .from("shortcall_points")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from(
+                    "shortcall_points"
+                )
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
 
         if (error) {
@@ -1550,7 +1560,9 @@ L.control.zoom({
         }
 
 
-        points = data || [];
+        points =
+            data || [];
+
 
         renderMarkers();
 
@@ -1564,11 +1576,9 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * RENDER MARKERS
-     * =====================================================
-     */
+    /* =========================
+       MARKER RENDERN
+    ========================== */
 
     function renderMarkers() {
 
@@ -1582,7 +1592,9 @@ L.control.zoom({
 
         const search =
             document
-                .getElementById("searchInput")
+                .getElementById(
+                    "searchInput"
+                )
                 .value
                 .toLowerCase()
                 .trim();
@@ -1590,74 +1602,69 @@ L.control.zoom({
 
         const category =
             document
-                .getElementById("categoryFilter")
+                .getElementById(
+                    "categoryFilter"
+                )
                 .value;
 
 
         points
-            .filter(point => {
+            .filter(
+                point => {
 
-                const combined = (
-
-                    (point.name || "") +
-                    " " +
-                    (point.description || "") +
-                    " " +
-                    (point.channel || "") +
-                    " " +
-                    (point.category || "")
-
-                ).toLowerCase();
+                    const combined =
+                        (
+                            (point.name || "") +
+                            " " +
+                            (point.description || "") +
+                            " " +
+                            (point.category || "")
+                        )
+                        .toLowerCase();
 
 
-                if (
-                    search &&
-                    !combined.includes(search)
-                ) {
+                    if (
+                        search &&
+                        !combined.includes(
+                            search
+                        )
+                    ) {
 
-                    return false;
+                        return false;
+
+                    }
+
+
+                    if (
+                        category &&
+                        point.category !== category
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    return true;
 
                 }
-
-
-                if (
-                    category &&
-                    point.category !== category
-                ) {
-
-                    return false;
-
-                }
-
-
-                return true;
-
-            })
-            .forEach(point => {
-
-                createMarker(point);
-
-            });
+            )
+            .forEach(
+                createMarker
+            );
 
     }
 
 
-    /*
-     * =====================================================
-     * MARKER
-     * =====================================================
-     */
+    /* =========================
+       MARKER ERSTELLEN
+    ========================== */
 
     function createMarker(point) {
 
-        /*
-         * DB:
-         * lat = Bild-Y
-         * lng = Bild-X
-         */
-
         const imageX =
             Number(point.lng);
+
 
         const imageY =
             Number(point.lat);
@@ -1672,13 +1679,32 @@ L.control.zoom({
             imageX;
 
 
+        const isTreffpunkt =
+            point.category ===
+            "Treffpunkt";
+
+
+        const markerClass =
+            isTreffpunkt
+                ? "shortcall-marker treffpunkt-marker"
+                : "shortcall-marker";
+
+
+        const markerEmoji =
+            isTreffpunkt
+                ? "📌"
+                : "📍";
+
+
         const icon =
             L.divIcon({
 
                 className: "",
 
                 html:
-                    '<div class="shortcall-marker">📍</div>',
+                    `<div class="${markerClass}">
+                        ${markerEmoji}
+                    </div>`,
 
                 iconSize: [
                     34,
@@ -1717,33 +1743,25 @@ L.control.zoom({
             </div>
 
             <div class="popup-category">
-                ${escapeHtml(point.category || "Shortcall")}
+                ${escapeHtml(
+                    point.category ||
+                    "Shortcall"
+                )}
             </div>
 
         `;
 
 
-        if (point.description) {
+        if (
+            point.description
+        ) {
 
             popup += `
 
                 <div class="popup-text">
-                    ${escapeHtml(point.description)}
-                </div>
-
-            `;
-
-        }
-
-
-        if (point.channel) {
-
-            popup += `
-
-                <div class="popup-channel">
-                    📻 Funk: <strong>
-                    ${escapeHtml(point.channel)}
-                    </strong>
+                    ${escapeHtml(
+                        point.description
+                    )}
                 </div>
 
             `;
@@ -1772,17 +1790,19 @@ L.control.zoom({
 
 
         marker
-            .bindPopup(popup)
-            .addTo(markerLayer);
+            .bindPopup(
+                popup
+            )
+            .addTo(
+                markerLayer
+            );
 
     }
 
 
-    /*
-     * =====================================================
-     * ADD POINT
-     * =====================================================
-     */
+    /* =========================
+       PUNKT HINZUFÜGEN
+    ========================== */
 
     function startAddPoint() {
 
@@ -1813,48 +1833,60 @@ L.control.zoom({
     ) {
 
         document
-            .getElementById("pointModalTitle")
+            .getElementById(
+                "pointModalTitle"
+            )
             .textContent =
-                "📍 Shortcall hinzufügen";
+                "📍 Punkt hinzufügen";
 
 
         document
-            .getElementById("pointId")
+            .getElementById(
+                "pointId"
+            )
             .value = "";
 
 
         document
-            .getElementById("pointLat")
+            .getElementById(
+                "pointLat"
+            )
             .value = y;
 
 
         document
-            .getElementById("pointLng")
+            .getElementById(
+                "pointLng"
+            )
             .value = x;
 
 
         document
-            .getElementById("pointName")
+            .getElementById(
+                "pointName"
+            )
             .value = "";
 
 
         document
-            .getElementById("pointCategory")
-            .value = "Verkehr";
+            .getElementById(
+                "pointCategory"
+            )
+            .value =
+                "Shortcall";
 
 
         document
-            .getElementById("pointChannel")
+            .getElementById(
+                "pointDescription"
+            )
             .value = "";
 
 
         document
-            .getElementById("pointDescription")
-            .value = "";
-
-
-        document
-            .getElementById("deletePointButton")
+            .getElementById(
+                "deletePointButton"
+            )
             .style.display =
                 "none";
 
@@ -1863,17 +1895,19 @@ L.control.zoom({
 
 
         document
-            .getElementById("pointModal")
-            .classList.add("open");
+            .getElementById(
+                "pointModal"
+            )
+            .classList.add(
+                "open"
+            );
 
     }
 
 
-    /*
-     * =====================================================
-     * EDIT POINT
-     * =====================================================
-     */
+    /* =========================
+       PUNKT BEARBEITEN
+    ========================== */
 
     function openEditPoint(id) {
 
@@ -1895,55 +1929,66 @@ L.control.zoom({
 
 
         document
-            .getElementById("pointModalTitle")
+            .getElementById(
+                "pointModalTitle"
+            )
             .textContent =
-                "✏️ Shortcall bearbeiten";
+                "✏️ Punkt bearbeiten";
 
 
         document
-            .getElementById("pointId")
+            .getElementById(
+                "pointId"
+            )
             .value =
                 point.id;
 
 
         document
-            .getElementById("pointLat")
+            .getElementById(
+                "pointLat"
+            )
             .value =
                 point.lat;
 
 
         document
-            .getElementById("pointLng")
+            .getElementById(
+                "pointLng"
+            )
             .value =
                 point.lng;
 
 
         document
-            .getElementById("pointName")
+            .getElementById(
+                "pointName"
+            )
             .value =
                 point.name || "";
 
 
         document
-            .getElementById("pointCategory")
+            .getElementById(
+                "pointCategory"
+            )
             .value =
-                point.category || "Sonstiges";
+                point.category ||
+                "Shortcall";
 
 
         document
-            .getElementById("pointChannel")
-            .value =
-                point.channel || "";
-
-
-        document
-            .getElementById("pointDescription")
+            .getElementById(
+                "pointDescription"
+            )
             .value =
                 point.description || "";
 
 
         document
-            .getElementById("deletePointButton")
+            .getElementById(
+                "deletePointButton"
+            )
             .style.display =
                 "block";
 
@@ -1952,17 +1997,19 @@ L.control.zoom({
 
 
         document
-            .getElementById("pointModal")
-            .classList.add("open");
+            .getElementById(
+                "pointModal"
+            )
+            .classList.add(
+                "open"
+            );
 
     }
 
 
-    /*
-     * =====================================================
-     * SAVE POINT
-     * =====================================================
-     */
+    /* =========================
+       PUNKT SPEICHERN
+    ========================== */
 
     async function savePoint() {
 
@@ -1979,33 +2026,34 @@ L.control.zoom({
 
         const id =
             document
-                .getElementById("pointId")
+                .getElementById(
+                    "pointId"
+                )
                 .value;
 
 
         const name =
             document
-                .getElementById("pointName")
+                .getElementById(
+                    "pointName"
+                )
                 .value
                 .trim();
 
 
         const category =
             document
-                .getElementById("pointCategory")
+                .getElementById(
+                    "pointCategory"
+                )
                 .value;
-
-
-        const channel =
-            document
-                .getElementById("pointChannel")
-                .value
-                .trim();
 
 
         const description =
             document
-                .getElementById("pointDescription")
+                .getElementById(
+                    "pointDescription"
+                )
                 .value
                 .trim();
 
@@ -2013,7 +2061,9 @@ L.control.zoom({
         const lat =
             Number(
                 document
-                    .getElementById("pointLat")
+                    .getElementById(
+                        "pointLat"
+                    )
                     .value
             );
 
@@ -2021,7 +2071,9 @@ L.control.zoom({
         const lng =
             Number(
                 document
-                    .getElementById("pointLng")
+                    .getElementById(
+                        "pointLng"
+                    )
                     .value
             );
 
@@ -2030,6 +2082,20 @@ L.control.zoom({
 
             showPointError(
                 "Bitte einen Namen eingeben."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            category !== "Shortcall" &&
+            category !== "Treffpunkt"
+        ) {
+
+            showPointError(
+                "Ungültige Kategorie."
             );
 
             return;
@@ -2057,11 +2123,9 @@ L.control.zoom({
 
             category,
 
-            channel:
-                channel || null,
-
             description:
-                description || null,
+                description ||
+                null,
 
             lat,
 
@@ -2080,7 +2144,9 @@ L.control.zoom({
                     .from(
                         "shortcall_points"
                     )
-                    .update(payload)
+                    .update(
+                        payload
+                    )
                     .eq(
                         "id",
                         id
@@ -2123,7 +2189,7 @@ L.control.zoom({
 
 
         showPointSuccess(
-            "Shortcall erfolgreich gespeichert."
+            "Punkt erfolgreich gespeichert."
         );
 
 
@@ -2144,11 +2210,9 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * DELETE POINT
-     * =====================================================
-     */
+    /* =========================
+       PUNKT LÖSCHEN
+    ========================== */
 
     async function deletePoint() {
 
@@ -2159,7 +2223,9 @@ L.control.zoom({
 
         const id =
             document
-                .getElementById("pointId")
+                .getElementById(
+                    "pointId"
+                )
                 .value;
 
 
@@ -2170,7 +2236,7 @@ L.control.zoom({
 
         const confirmed =
             confirm(
-                "Möchtest du diesen Shortcall wirklich löschen?"
+                "Möchtest du diesen Punkt wirklich löschen?"
             );
 
 
@@ -2181,20 +2247,24 @@ L.control.zoom({
 
         const {
             error
-        } = await supabaseClient
-            .from(
-                "shortcall_points"
-            )
-            .delete()
-            .eq(
-                "id",
-                id
-            );
+        } =
+            await supabaseClient
+                .from(
+                    "shortcall_points"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
 
             showPointError(
                 error.message
@@ -2215,11 +2285,9 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * MODAL
-     * =====================================================
-     */
+    /* =========================
+       MODAL
+    ========================== */
 
     function closeModal(id) {
 
@@ -2235,14 +2303,18 @@ L.control.zoom({
     function clearPointMessages() {
 
         document
-            .getElementById("pointError")
+            .getElementById(
+                "pointError"
+            )
             .classList.remove(
                 "show"
             );
 
 
         document
-            .getElementById("pointSuccess")
+            .getElementById(
+                "pointSuccess"
+            )
             .classList.remove(
                 "show"
             );
@@ -2250,7 +2322,9 @@ L.control.zoom({
     }
 
 
-    function showPointError(message) {
+    function showPointError(
+        message
+    ) {
 
         const box =
             document
@@ -2270,7 +2344,9 @@ L.control.zoom({
     }
 
 
-    function showPointSuccess(message) {
+    function showPointSuccess(
+        message
+    ) {
 
         const box =
             document
@@ -2290,15 +2366,15 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * HTML SECURITY
-     * =====================================================
-     */
+    /* =========================
+       HTML SICHERHEIT
+    ========================== */
 
     function escapeHtml(value) {
 
-        return String(value ?? "")
+        return String(
+            value ?? ""
+        )
             .replace(
                 /&/g,
                 "&amp;"
@@ -2323,11 +2399,9 @@ L.control.zoom({
     }
 
 
-    /*
-     * =====================================================
-     * CLOSE MODALS WITH BACKDROP CLICK
-     * =====================================================
-     */
+    /* =========================
+       MODAL KLICK AUßEN
+    ========================== */
 
     document.addEventListener(
         "click",
