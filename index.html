@@ -583,6 +583,35 @@
                 font-size: 12px;
             }
         }
+   .privacy-link {
+    position: fixed;
+    z-index: 2000;
+
+    right: 14px;
+    bottom: 10px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 11px;
+    text-decoration: none;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: rgba(8, 14, 21, 0.75);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(5px);
+
+    transition: 0.15s ease;
+}
+
+.privacy-link:hover {
+    color: #fff;
+    background: rgba(8, 14, 21, 0.95);
+}
     </style>
 </head>
 
@@ -981,6 +1010,13 @@
 
 
 <script>
+    function openPrivacy() {
+
+    document
+        .getElementById("privacyModal")
+        .classList.add("open");
+
+}
 
     /* =========================
        KONFIGURATION
@@ -2437,4 +2473,68 @@ const markerEmoji =
 </script>
 
 </body>
+    <a
+    href="#"
+    class="privacy-link"
+    onclick="openPrivacy(); return false;"
+>
+    Datenschutz
+</a>
+
+<div
+    class="modal-overlay"
+    id="privacyModal"
+>
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div class="modal-title">
+                🔒 Datenschutz
+            </div>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('privacyModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="popup-text">
+
+            <p>
+                Diese Webseite dient ausschließlich zur
+                Orientierung der Spieler des zugehörigen
+                GTA-RP-Servers.
+            </p>
+
+            <p>
+                Die Karte kann ohne Benutzerkonto und ohne
+                Anmeldung genutzt werden.
+            </p>
+
+            <p>
+                Für die Verwaltung der Kartenpunkte wird
+                Supabase verwendet. Der Admin-Bereich ist
+                ausschließlich für autorisierte Personen
+                zugänglich.
+            </p>
+
+            <p>
+                Die Webseite wird über GitHub Pages
+                bereitgestellt.
+            </p>
+
+            <p>
+                Es werden über die öffentliche Kartenansicht
+                keine Benutzerkonten für normale Besucher
+                benötigt.
+            </p>
+
+        </div>
+
+    </div>
+</div>
 </html>
