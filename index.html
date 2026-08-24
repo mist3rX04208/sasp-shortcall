@@ -612,11 +612,256 @@
     color: #fff;
     background: rgba(8, 14, 21, 0.95);
 }
+    /* =====================================================
+   STARTBILDSCHIRM
+   ===================================================== */
+
+#startScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(3, 13, 27, 0.05),
+            rgba(2, 10, 22, 0.08)
+        ),
+        url("start-bg.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding-bottom: 8.5%;
+
+    box-sizing: border-box;
+
+    transition:
+        opacity 0.45s ease,
+        visibility 0.45s ease;
+}
+
+#startScreen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+/* BUTTON-BEREICH */
+
+.start-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 28px;
+
+    width: min(760px, 90vw);
+}
+
+
+/* EINZELNER BUTTON */
+
+.start-button {
+    position: relative;
+
+    width: 320px;
+    min-height: 105px;
+
+    padding: 18px 25px;
+
+    border: 1px solid rgba(214, 157, 43, 0.75);
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 25, 48, 0.96),
+            rgba(2, 12, 26, 0.96)
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(5px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* GOLDENE LINIE OBEN */
+
+.start-button::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 18%;
+    right: 18%;
+
+    height: 2px;
+
+    background: #d6a13a;
+
+    box-shadow:
+        0 0 10px rgba(214, 161, 58, 0.45);
+}
+
+
+/* HOVER */
+
+.start-button:hover {
+    transform: translateY(-5px);
+
+    border-color: #e4b653;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 35, 65, 0.98),
+            rgba(3, 16, 33, 0.98)
+        );
+
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.65),
+        0 0 18px rgba(214, 161, 58, 0.18);
+}
+
+
+/* KLICK */
+
+.start-button:active {
+    transform: translateY(-1px);
+}
+
+
+/* ICON */
+
+.button-icon {
+    font-size: 20px;
+
+    color: #d9a53d;
+
+    margin-bottom: 4px;
+
+    text-shadow:
+        0 0 8px rgba(217, 165, 61, 0.35);
+}
+
+
+/* TITEL */
+
+.button-title {
+    font-size: 22px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #f4f4f4;
+
+    text-shadow:
+        0 2px 5px rgba(0,0,0,0.65);
+}
+
+
+/* UNTERTITEL */
+
+.button-subtitle {
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+
+    color: rgba(220, 225, 232, 0.62);
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+    #startScreen {
+        padding-bottom: 9%;
+    }
+
+    .start-buttons {
+        flex-direction: column;
+
+        gap: 14px;
+
+        width: 88vw;
+    }
+
+    .start-button {
+        width: 100%;
+
+        min-height: 88px;
+    }
+
+    .button-title {
+        font-size: 19px;
+    }
+
+}    
     </style>
 </head>
 
 <body>
+<!-- STARTBILDSCHIRM -->
+<div id="startScreen">
 
+    <div class="start-buttons">
+
+        <button
+            class="start-button"
+            onclick="openSASP()"
+        >
+            <span class="button-icon">★</span>
+            <span class="button-title">SASP</span>
+            <span class="button-subtitle">SASP Konzept</span>
+        </button>
+
+        <button
+            class="start-button"
+            onclick="openShortcallMap()"
+        >
+            <span class="button-icon">◉</span>
+            <span class="button-title">SHORTCALL MAP</span>
+            <span class="button-subtitle">Zur Einsatzkarte</span>
+        </button>
+
+    </div>
+
+</div>
 <div id="app">
 
     <div id="map"></div>
@@ -2469,7 +2714,30 @@ const markerEmoji =
 
         }
     );
+/* =====================================================
+   STARTBILDSCHIRM
+   ===================================================== */
 
+function openSASP() {
+
+    window.location.href =
+        "https://sites.google.com/view/sasp-konzept/startseite?authuser=0";
+
+}
+
+
+function openShortcallMap() {
+
+    const startScreen =
+        document.getElementById("startScreen");
+
+    if (!startScreen) {
+        return;
+    }
+
+    startScreen.classList.add("hidden");
+
+}
 </script>
 
 </body>
