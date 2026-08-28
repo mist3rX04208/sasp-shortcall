@@ -1067,10 +1067,97 @@
 .home-button:active {
     transform: scale(0.96);
 }
+       /* =====================================================
+   OIA 404 EASTER EGG
+   ===================================================== */
+
+#oia404Screen {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 200000;
+
+    background: #000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.35s ease;
+}
+
+
+/* OIA-BILDSCHIRM SICHTBAR */
+
+#oia404Screen.active {
+
+    display: flex;
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* OIA-BILD */
+
+#oia404Screen img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* AUSBLENDEN */
+
+#oia404Screen.hiding {
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    #oia404Screen img {
+
+        object-fit: cover;
+
+    }
+
+} 
     </style>
 </head>
 
 <body>
+    
+    <!-- OIA 404 EASTER EGG -->
+<div id="oia404Screen">
+
+    <img
+        src="oia-404.png"
+        alt="OIA 404 - Zugriff verweigert"
+    >
+
+</div>
 <!-- STARTBILDSCHIRM -->
 <div id="startScreen">
 
@@ -3122,12 +3209,46 @@ function closeStartQuote() {
         return;
     }
 
+
     quoteElement.classList.add("closed");
+
+
+    /*
+     * Nach dem Schließen des Spruchs
+     * besteht eine kleine Chance auf das OIA Easter Egg.
+     *
+     * 50 %
+     */
+
+    if (Math.random() < 0.5) {
+
+        setTimeout(() => {
+
+            showOIA404();
+
+        }, 300);
+
+    }
 
 }
 
 
 showRandomQuote();
+    /*
+ * Sehr seltenes OIA Easter Egg
+ *
+ * 1 % Wahrscheinlichkeit
+ */
+
+if (Math.random() < 0.01) {
+
+    setTimeout(() => {
+
+        showOIA404();
+
+    }, 500);
+
+}
  /* =====================================================
    ZURÜCK ZUR STARTSEITE
    ===================================================== */
@@ -3137,6 +3258,115 @@ function goToStart() {
     window.location.reload();
 
 }   
+    /* =====================================================
+   OIA 404 EASTER EGG
+   ===================================================== */
+
+let oia404Timer = null;
+
+
+/*
+ * OIA 404 anzeigen
+ */
+
+function showOIA404() {
+
+    const oiaScreen =
+        document.getElementById("oia404Screen");
+
+    const startScreen =
+        document.getElementById("startScreen");
+
+    if (!oiaScreen) {
+        return;
+    }
+
+
+    /*
+     * Startbildschirm verstecken
+     */
+
+    if (startScreen) {
+
+        startScreen.style.display = "none";
+
+    }
+
+
+    /*
+     * OIA anzeigen
+     */
+
+    oiaScreen.classList.remove("hiding");
+
+    oiaScreen.classList.add("active");
+
+
+    /*
+     * Falls bereits ein Timer existiert,
+     * diesen löschen.
+     */
+
+    if (oia404Timer) {
+
+        clearTimeout(oia404Timer);
+
+    }
+
+
+    /*
+     * Nach 10 Sekunden zurück
+     * zum Startbildschirm
+     */
+
+    oia404Timer = setTimeout(() => {
+
+        hideOIA404();
+
+    }, 10000);
+
+}
+
+
+/*
+ * OIA 404 schließen
+ */
+
+function hideOIA404() {
+
+    const oiaScreen =
+        document.getElementById("oia404Screen");
+
+    const startScreen =
+        document.getElementById("startScreen");
+
+    if (!oiaScreen) {
+        return;
+    }
+
+
+    oiaScreen.classList.add("hiding");
+
+
+    setTimeout(() => {
+
+        oiaScreen.classList.remove("active");
+        oiaScreen.classList.remove("hiding");
+
+
+        /*
+         * Startbildschirm wieder anzeigen
+         */
+
+        if (startScreen) {
+
+            startScreen.style.display = "flex";
+
+        }
+
+    }, 350);
+
+}
 </script>
 
 </body>
