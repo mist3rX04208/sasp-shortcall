@@ -1153,12 +1153,85 @@
 
 }
 
+/* =====================================================
+   OIA ZUGRIFF FREIGEGEBEN
+   ===================================================== */
+
+#oiaAccessScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 200001;
+
+    background-color: #000;
+
+    background-image: url("oia-access.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.5s ease;
+
+    overflow: hidden;
+}
+
+
+/* SICHTBAR */
+
+#oiaAccessScreen.active {
+
+    display: flex;
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+}
+
+
+/* DAS BILD WIRD ALS BACKGROUND VERWENDET */
+
+#oiaAccessScreen img {
+
+    display: none;
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    #oiaAccessScreen {
+
+        background-size: cover;
+        background-position: center center;
+
+    }
+
+}
     </style>
 </head>
 
 <body>
     
-    <!-- OIA 404 EASTER EGG -->
+<!-- OIA 404 EASTER EGG -->
 <div id="oia404Screen">
 
     <img
@@ -1167,6 +1240,19 @@
     >
 
 </div>
+
+
+<!-- OIA ZUGRIFF FREIGEGEBEN -->
+<div id="oiaAccessScreen">
+
+    <img
+        src="oia-access.png"
+        alt="OIA Zugriff freigegeben"
+    >
+
+</div>
+
+
 <!-- STARTBILDSCHIRM -->
 <div id="startScreen">
 
@@ -3340,19 +3426,26 @@ function showOIA404() {
 /*
  * OIA 404 schließen
  */
-
 function hideOIA404() {
 
     const oiaScreen =
         document.getElementById("oia404Screen");
 
+    const accessScreen =
+        document.getElementById("oiaAccessScreen");
+
     const startScreen =
         document.getElementById("startScreen");
+
 
     if (!oiaScreen) {
         return;
     }
 
+
+    /*
+     * OIA 404 ausblenden
+     */
 
     oiaScreen.classList.add("hiding");
 
@@ -3364,14 +3457,41 @@ function hideOIA404() {
 
 
         /*
-         * Startbildschirm wieder anzeigen
+         * Zweites OIA-Bild anzeigen
          */
 
-        if (startScreen) {
+        if (accessScreen) {
 
-            startScreen.style.display = "flex";
+            accessScreen.classList.add("active");
 
         }
+
+
+        /*
+         * Zweites Bild bleibt 10 Sekunden
+         */
+
+        setTimeout(() => {
+
+            if (accessScreen) {
+
+                accessScreen.classList.remove("active");
+
+            }
+
+
+            /*
+             * Startseite wieder anzeigen
+             */
+
+            if (startScreen) {
+
+                startScreen.style.display = "flex";
+
+            }
+
+        }, 10000);
+
 
     }, 350);
 
