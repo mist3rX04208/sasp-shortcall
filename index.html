@@ -2907,14 +2907,18 @@ const lng =
 
 /* =========================
    SAFETY TOWER
-   Kein Name erforderlich
 ========================= */
 
-if (
-    category === "Safety Tower" &&
-    !pointName
-) {
-    pointName = "Safety Tower";
+if (category === "Safety Tower") {
+
+    if (!pointName) {
+        pointName = "Safety Tower";
+    }
+
+    if (!description) {
+        description = "Mobile Videoüberwachung";
+    }
+
 }
 
 
