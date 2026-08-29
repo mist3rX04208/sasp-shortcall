@@ -2897,7 +2897,28 @@ if (
     return;
 
 }
-        
+    /* =========================
+           DATEN FÜR SUPABASE
+        ========================== */
+
+        const payload = {
+
+            name: pointName,
+
+            category,
+
+            description:
+                description ||
+                null,
+
+            lat,
+
+            lng
+
+        };
+
+
+        let result;   
 
 
         if (id) {
