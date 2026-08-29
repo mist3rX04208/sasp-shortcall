@@ -2832,15 +2832,16 @@ const markerEmoji =
             );
 
 
-        if (!name) {
+        if (
+    !name &&
+    category !== "Safety Tower"
+) {
+    showPointError(
+        "Bitte einen Namen eingeben."
+    );
 
-            showPointError(
-                "Bitte einen Namen eingeben."
-            );
-
-            return;
-
-        }
+    return;
+}
 
 
         if (
@@ -2871,21 +2872,21 @@ const markerEmoji =
         }
 
 
-        const payload = {
+      const payload = {
 
-            name,
+    name: pointName,
 
-            category,
+    category,
 
-            description:
-                description ||
-                null,
+    description:
+        description ||
+        null,
 
-            lat,
+    lat,
 
-            lng
+    lng
 
-        };
+};
 
 
         let result;
