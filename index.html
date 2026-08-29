@@ -2844,17 +2844,17 @@ const markerEmoji =
 
 
         if (
-            category !== "Shortcall" &&
-            category !== "Kontrollposten"
-        ) {
+    category !== "Shortcall" &&
+    category !== "Kontrollposten" &&
+    category !== "Safety Tower"
+) {
 
-            showPointError(
-                "Ungültige Kategorie."
-            );
+    showPointError(
+        "Ungültige Kategorie."
+    );
 
-            return;
-
-        }
+    return;
+}
 
 
         if (
