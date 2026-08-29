@@ -2785,63 +2785,14 @@ const markerEmoji =
                 )
                 .value;
 
-
-        const name =
-            document
-                .getElementById(
-                    "pointName"
-                )
-                .value
-                .trim();
-
-
-        const category =
-            document
-                .getElementById(
-                    "pointCategory"
-                )
-                .value;
-
-
-        const description =
-            document
-                .getElementById(
-                    "pointDescription"
-                )
-                .value
-                .trim();
-
-
-        const lat =
-            Number(
-                document
-                    .getElementById(
-                        "pointLat"
-                    )
-                    .value
-            );
-
-
-        const lng =
-            Number(
-                document
-                    .getElementById(
-                        "pointLng"
-                    )
-                    .value
-            );
-
-
-        if (
-    !name &&
-    category !== "Safety Tower"
-) {
+if (!name) {
     showPointError(
         "Bitte einen Namen eingeben."
     );
 
     return;
 }
+        
 
 
         if (
