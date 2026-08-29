@@ -2777,25 +2777,96 @@ const markerEmoji =
 
         }
 
+const id =
+    document
+        .getElementById(
+            "pointId"
+        )
+        .value;
 
-        const id =
-            document
-                .getElementById(
-                    "pointId"
-                )
-                .value;
 
-if (!name) {
+let pointName =
+    document
+        .getElementById(
+            "pointName"
+        )
+        .value
+        .trim();
+
+
+const category =
+    document
+        .getElementById(
+            "pointCategory"
+        )
+        .value;
+
+
+const description =
+    document
+        .getElementById(
+            "pointDescription"
+        )
+        .value
+        .trim();
+
+
+const lat =
+    Number(
+        document
+            .getElementById(
+                "pointLat"
+            )
+            .value
+    );
+
+
+const lng =
+    Number(
+        document
+            .getElementById(
+                "pointLng"
+            )
+            .value
+    );
+
+
+/* =========================
+   SAFETY TOWER
+   Kein Name erforderlich
+========================= */
+
+if (
+    category === "Safety Tower" &&
+    !pointName
+) {
+    pointName = "Safety Tower";
+}
+
+
+/* =========================
+   NAME PRÜFEN
+========================= */
+
+if (
+    !pointName &&
+    category !== "Safety Tower"
+) {
+
     showPointError(
         "Bitte einen Namen eingeben."
     );
 
     return;
+
 }
-        
 
 
-        if (
+/* =========================
+   KATEGORIE PRÜFEN
+========================= */
+
+if (
     category !== "Shortcall" &&
     category !== "Kontrollposten" &&
     category !== "Safety Tower"
@@ -2806,41 +2877,27 @@ if (!name) {
     );
 
     return;
+
 }
 
 
-        if (
-            Number.isNaN(lat) ||
-            Number.isNaN(lng)
-        ) {
+/* =========================
+   POSITION PRÜFEN
+========================= */
 
-            showPointError(
-                "Ungültige Kartenposition."
-            );
+if (
+    Number.isNaN(lat) ||
+    Number.isNaN(lng)
+) {
 
-            return;
+    showPointError(
+        "Ungültige Kartenposition."
+    );
 
-        }
+    return;
 
-
-      const payload = {
-
-    name: pointName,
-
-    category,
-
-    description:
-        description ||
-        null,
-
-    lat,
-
-    lng
-
-};
-
-
-        let result;
+}
+        
 
 
         if (id) {
@@ -3465,7 +3522,6 @@ function hideOIA404() {
 
 }
 </script>
-
 </body>
     <a
     href="#"
